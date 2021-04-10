@@ -18,7 +18,7 @@ println("Highest available seat is $highestSeat")
 int first = seatList.first()
 int last = seatList.last()
 // subtract used seats from all available seats should result in a list containing only one seat that has to be mine
-int mySeat = (first..last).toList().minus(seatList).first()
+int mySeat = ((first..last).toList() - seatList).first()
 println("My seat is $mySeat")
 
 
