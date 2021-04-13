@@ -13,23 +13,21 @@ println("Solution for first Puzzle is $result1")
 int result2 = get2020ProductOfThree(input)
 println("Solution for first Puzzle is $result2")
 
-int get2020ProductOfTwo(List<Integer> input) {
-    int result = 0
+static int get2020ProductOfTwo(List<Integer> input) {
     for (int i = 0; i < input.size(); i++) {
         for (int j = i; j < input.size(); j++) {
             int first = input.get(i)
             int second = input.get(j)
 
             if (first + second == 2020) {
-                result = first * second
+                return first * second
             }
         }
     }
-    return result
+    return 0
 }
 
-int get2020ProductOfThree(List<Integer> input) {
-    int result = 0
+static int get2020ProductOfThree(List<Integer> input) {
     for (int i = 0; i < input.size(); i++) {
         for (int j = i; j < input.size(); j++) {
             for (int k = j; k < input.size(); k++) {
@@ -38,10 +36,10 @@ int get2020ProductOfThree(List<Integer> input) {
                 int third = input.get(k)
 
                 if (first + second + third == 2020) {
-                    result = first * second * third
+                    return first * second * third
                 }
             }
         }
     }
-    return result
+    return 0
 }

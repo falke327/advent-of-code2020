@@ -1,6 +1,11 @@
 package day02
 
+import groovy.transform.Field
+
 import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+@Field static final Pattern PATTERN = ~"([0-9]+)-([0-9]+) ([a-z]): ([a-z]+)"
 
 List<String> testInput = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]
 int validTest1 = validPasswordsByCount(testInput)
@@ -15,51 +20,39 @@ int result2 = validPasswordsByPosition(input)
 println("In the inputfile there are $result2 valid passwords for position criteria.")
 
 
-def collectMatchingGroups(List<String> input) {
-    def pattern = ~"([0-9]+)-([0-9]+) ([a-z]): ([a-z]+)"
-    def result = []
+static List<LineGrouping> collectMatchingGroups(List<String> input) {
+    List<LineGrouping> result = []
 
     for (String line : input) {
-        List<String> groups = new ArrayList<>()
-        Matcher m = pattern.matcher(line)
+        Matcher m = PATTERN.matcher(line)
+
         while (m.find()) {
-            for (int i = 0; i <= m.groupCount(); i++) {
-                groups.add(m.group(i))
-            }
+            int lowerBorder = m.group(1) as int
+            int upperBorder = m.group(2) as int
+            char character = m.group(3) as char
+            String passPhrase = m.group(4)
+            result.add(new LineGrouping(passPhrase, character, lowerBorder, upperBorder))
         }
-        result.add(groups)
     }
 
     return result
 }
 
-int validPasswordsByCount(List<String> input) {
-    int counter = 0
-    def matcherGroups = collectMatchingGroups(input)
+static int validPasswordsByCount(List<String> input) {
+    List<LineGrouping> matcherGroups = collectMatchingGroups(input)
 
-    for (List<String> groups : matcherGroups) {
-        if ((groups[1] as int) <= groups[4].count(groups[3]) && groups[4].count(groups[3]) <= (groups[2] as int)) {
-            counter++
-        }
+    return matcherGroups.count { lineGrouping ->
+        lineGrouping.getLowerBorder() <= lineGrouping.getCharCount() && lineGrouping.getCharCount() <= lineGrouping.getUpperBorder()
     }
-
-    return counter
 }
 
-int validPasswordsByPosition(List<String> input) {
-    int counter = 0
-    def matcherGroups = collectMatchingGroups(input)
+static int validPasswordsByPosition(List<String> input) {
+    List<LineGrouping> matcherGroups = collectMatchingGroups(input)
 
-    for (List<String> groups : matcherGroups) {
-        if (
-        groups[4].charAt((groups[1] as int) - 1).toString() == groups[3] &&
-                groups[4].charAt((groups[2] as int) - 1).toString() != groups[3] ||
-                groups[4].charAt((groups[1] as int) - 1).toString() != groups[3] &&
-                groups[4].charAt((groups[2] as int) - 1).toString() == groups[3]
-        ) {
-            counter++
-        }
+    return matcherGroups.count { lineGrouping ->
+        lineGrouping.getPassPhrase().charAt(lineGrouping.getLowerBorder() - 1) == lineGrouping.getCharacter() &&
+                lineGrouping.getPassPhrase().charAt(lineGrouping.getUpperBorder() - 1) != lineGrouping.getCharacter() ||
+                lineGrouping.getPassPhrase().charAt(lineGrouping.getLowerBorder() - 1) != lineGrouping.getCharacter() &&
+                lineGrouping.getPassPhrase().charAt(lineGrouping.getUpperBorder() - 1) == lineGrouping.getCharacter()
     }
-
-    return counter
 }
