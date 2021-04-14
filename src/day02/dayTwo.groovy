@@ -19,7 +19,20 @@ println("In the inputfile there are $result1 valid passwords for count criteria.
 int result2 = validPasswordsByPosition(input)
 println("In the inputfile there are $result2 valid passwords for position criteria.")
 
-
+/**
+ * <p>Performs a pattern matching over a List of Strings and maps the matcher groups
+ * into the helperclass {@link day02.LineGrouping}.</p>
+ * <p>Input entries should be formatted like "1-3 a: abcde"</p>
+ * <p>Resulting in the matching groups:</p>
+ * <ul>
+ *     <li>1 as lower border</li>
+ *     <li>3 as upper border</li>
+ *     <li>a as character of relevance</li>
+ *     <li>abcde as the current pass phrase</li>
+ * </ul>
+ *
+ * @return a List of LineGrouping Objects containing all valid matchings
+ */
 static List<LineGrouping> collectMatchingGroups(List<String> input) {
     List<LineGrouping> result = []
 
@@ -38,6 +51,16 @@ static List<LineGrouping> collectMatchingGroups(List<String> input) {
     return result
 }
 
+/**
+ * <p>Consumes a List of Strings and calls collectMatchingGroups() to get valid
+ * groupings</p>
+ * <p>Checks if the pass phrase of each line contains the exact amount of relevant
+ * characters that is defined by the lower and upper border</p>
+ * <p>"1-3 a: abcde" contains one a, what is between 1 and 3. This will result in true.</p>
+ * <p>"1-3 a: aaaaa" contains fife a, what is over the upper border of 3. This will result in false.</p>
+ *
+ * @return the count of valid lines in the input List
+ */
 static int validPasswordsByCount(List<String> input) {
     List<LineGrouping> matcherGroups = collectMatchingGroups(input)
 
@@ -46,6 +69,16 @@ static int validPasswordsByCount(List<String> input) {
     }
 }
 
+/**
+ * <p>Consumes a List of Strings and calls collectMatchingGroups() to get valid
+ * groupings</p>
+ * <p>Checks if the pass phrase contains the relevant character on either the
+ * lower or upper position, but never both at the same time.</p>
+ * <p>"1-3 a: abcde" contains an a at position 1 and no a at position 3. This will result in true.</p>
+ * <p>"1-3 a: aaaaa" contains an a at position 1 and also on position 3. This will result in false.</p>
+ *
+ * @return the count of valid lines in the input List
+ */
 static int validPasswordsByPosition(List<String> input) {
     List<LineGrouping> matcherGroups = collectMatchingGroups(input)
 
