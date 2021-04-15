@@ -2,7 +2,7 @@ package day05
 
 import java.util.stream.Collectors
 
-List<String> input = new File("input.txt").readLines()
+List<String> input = new File("inputFife.txt").readLines()
 List<Integer> seatList = input.stream()
         .map({ line ->
             int row = getRow(line)

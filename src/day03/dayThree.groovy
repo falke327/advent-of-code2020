@@ -42,7 +42,7 @@ List<Integer> slopes = [
         countTrees(input, 0, 1, 2)
 ]
 long product = 1L
-slopes.forEach { trees ->
+slopes.each { trees ->
     product *= trees
 }
 println("Product of trees on each slope is $product")
