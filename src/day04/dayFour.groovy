@@ -1,13 +1,13 @@
 package day04
 
-List<String> testInput = new File("testFour.txt").readLines()
+List<String> testInput = new File("testFour.txt").text.split(/\r\n\r\n/)
 int counter1 = countCompleteEntries(testInput)
 assert counter1 == 2
-List<String> testInput2 = new File("testFour2.txt").readLines()
+List<String> testInput2 = new File("testFour2.txt").text.split(/\r\n\r\n/)
 int counter2 = countValidEntries(testInput2)
 assert counter2 == 4
 
-List<String> input = new File("inputFour.txt").readLines()
+List<String> input = new File("inputFour.txt").text.split(/\r\n\r\n/)
 int result1 = countCompleteEntries(input)
 println("The passport List contains $result1 complete passports")
 int result2 = countValidEntries(input)
@@ -21,7 +21,7 @@ println("The passport List contains $result2 valid passports")
  * @return the count of passports containing all relevant fields
  */
 static int countCompleteEntries(List<String> input) {
-    List<Passport> passports = packLinesToPassports(input)
+    List<Passport> passports = parsePassports(input)
 
     return passports.count { passport ->
         passport.isComplete()
@@ -34,7 +34,7 @@ static int countCompleteEntries(List<String> input) {
  * @return the count of passports that are valid by criteria
  */
 static int countValidEntries(List<String> lines) {
-    List<Passport> passports = packLinesToPassports(lines)
+    List<Passport> passports = parsePassports(lines)
 
     return passports.count { passport ->
         passport.isComplete() && passport.isValid()
@@ -42,44 +42,16 @@ static int countValidEntries(List<String> lines) {
 }
 
 /**
- * <p>Consumes a List of possibly multiline passports separated by empty lines
- * and transforms it to a List of {@link day04.Passport}</p>
+ * <p>Parses a passport String into a {@link day04.Passport} Object</p>
  *
- * @return a List of passport oneliners
+ * @return a List of Passports
  */
-static List<Passport> packLinesToPassports(List<String> lines) {
-    List<String> buffer = []
+static List<Passport> parsePassports(List<String> lines) {
     List<Passport> passports = []
-
-    lines.each { line ->
-        if (line.isEmpty()) {
-            passports.add(new Passport(bufferToString(buffer)))
-            buffer.clear()
-        } else {
-            buffer.add(line)
-        }
+    lines.each {line ->
+        passports.add(
+                new Passport(line.replace("\r\n"," "))
+        )
     }
-    // since a passport List doesn't end with an empty line we have to add the last entry manually like this
-    if (!buffer.isEmpty()) {
-        passports.add(new Passport(bufferToString(buffer)))
-    }
-
     return passports
-}
-
-/**
- * <p>Flattens a List of passport lines into one single String where all key-value pairs are separated by a space.</p>
- * <p>[ "hcl:#ae17e1 iyr:2013",<br/>
- * "eyr:2024",<br/>
- * "ecl:brn pid:760753108 byr:1931",</br>
- * "hgt:179cm" ]<br/>
- * will result in "hcl:#ae17e1 iyr:2013 eyr:2024 ecl:brn pid:760753108 byr:1931 hgt:179cm"</p>
- *
- * @return A String representation of a passport
- */
-static String bufferToString(List<String> buffer) {
-    return buffer.toString()
-            .replace(",", "")
-            .replace("[", "")
-            .replace("]", "")
 }
