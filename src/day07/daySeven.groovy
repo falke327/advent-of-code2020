@@ -14,28 +14,36 @@ println("In the input file there are $result1 possible containers for shiny gold
  * <p>Counts all the color-codes in the input List when they or their children contain the expected color</p>
  */
 static int countBagsForColor(List<String> input, String expectedColor) {
-    Map graph = transformToGraph(input)
+    Map graph = transformToGraph(input, false)
 
     return graph.keySet().count { node ->
-        containsColor(node, graph, expectedColor)
+        Map<String, Boolean> recursionBuffer = [:]
+        containsColor(node, graph, expectedColor, recursionBuffer)
     }
 }
 
 /**
  * <p>Recursively checks if the current node or one of its children contains the expected color</p>
  */
-static boolean containsColor(String currentNode, Map<String, List> graph, String expectedColor) {
+static boolean containsColor(String currentNode, Map<String, List> graph, String expectedColor, Map<String, Boolean> recursionBuffer) {
+    if (recursionBuffer.containsKey(currentNode)) {
+        return recursionBuffer.get(currentNode)
+    }
+
+    boolean result
     List<String> children = graph.get(currentNode)
     if (children.isEmpty()) {
-        return false
-    }
-    if (children.contains(expectedColor)) {
-        return true
+        result = false
+    } else if (children.contains(expectedColor)) {
+        result = true
     } else {
-        return children.collect { child ->
-            containsColor(child as String, graph, expectedColor)
+        result = children.collect { child ->
+            containsColor(child as String, graph, expectedColor, recursionBuffer)
         }.any()
     }
+
+    recursionBuffer.put(currentNode, result)
+    return result
 }
 
 /**
@@ -43,13 +51,18 @@ static boolean containsColor(String currentNode, Map<String, List> graph, String
  * others will be passed as a List of values.</p>
  * <p>On leaf nodes this list will be empty</p>
  */
-static Map<String, List> transformToGraph(List<String> input) {
+static Map<String, List> transformToGraph(List<String> input, boolean withInnerCount) {
     Pattern pattern = ~"(\\d+) (.+?) bag"
     Map<String, List> container = input.collectEntries { line ->
         List<String> content = line.split(" bags contain")
         Matcher m = pattern.matcher(content[1])
-        List innerBags = m.findAll().collect {
-            it[2]
+        List innerBags = []
+        if (withInnerCount) {
+            // TODO: implement me
+        } else {
+            innerBags.addAll(m.findAll().collect { groups ->
+                groups[2]
+            })
         }
 
         return [content[0], innerBags]
