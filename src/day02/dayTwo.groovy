@@ -6,6 +6,10 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 @Field static final Pattern PATTERN = ~"([0-9]+)-([0-9]+) ([a-z]): ([a-z]+)"
+@Field static final int LOWER_BORDER = 1
+@Field static final int UPPER_BORDER = 2
+@Field static final int CHARACTER = 3
+@Field static final int PASSPHRASE = 4
 
 List<String> testInput = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]
 int validTest1 = validPasswordsByCount(testInput)
@@ -20,35 +24,41 @@ int result2 = validPasswordsByPosition(input)
 println("In the inputfile there are $result2 valid passwords for position criteria.")
 
 /**
- * <p>Performs a pattern matching over a List of Strings and maps the matcher groups
- * into the helperclass {@link day02.LineGrouping}.</p>
+ * <p>Collects {@link day02.LineGrouping} from a List of Strings.</p>
  * <p>Input entries should be formatted like "1-3 a: abcde"</p>
- * <p>Resulting in the matching groups:</p>
+ *
+ * @return a List of {@link day02.LineGrouping} Objects containing all valid matchings
+ */
+static List<LineGrouping> collectMatchingGroups(List<String> input) {
+    List<LineGrouping> validGroupings = []
+
+    for (String line : input) {
+        Matcher lineMatcher = PATTERN.matcher(line)
+        while (lineMatcher.find()) {
+            validGroupings.add(packLineGrouping(lineMatcher))
+        }
+    }
+
+    return validGroupings
+}
+
+/**
+ * <p>Extracts the relevant Groups from a Matcher and packages them into {@link day02.LineGrouping}</p>
+ * <p>A Matcher on "1-3 a: abcde" is resulting in the matching groups:</p>
  * <ul>
  *     <li>1 as lower border</li>
  *     <li>3 as upper border</li>
  *     <li>a as character of relevance</li>
  *     <li>abcde as the current pass phrase</li>
  * </ul>
- *
- * @return a List of LineGrouping Objects containing all valid matchings
  */
-static List<LineGrouping> collectMatchingGroups(List<String> input) {
-    List<LineGrouping> result = []
+static LineGrouping packLineGrouping(Matcher lineMatcher) {
+    int lowerBorder = lineMatcher.group(LOWER_BORDER) as int
+    int upperBorder = lineMatcher.group(UPPER_BORDER) as int
+    char character = lineMatcher.group(CHARACTER) as char
+    String passPhrase = lineMatcher.group(PASSPHRASE)
 
-    for (String line : input) {
-        Matcher m = PATTERN.matcher(line)
-
-        while (m.find()) {
-            int lowerBorder = m.group(1) as int
-            int upperBorder = m.group(2) as int
-            char character = m.group(3) as char
-            String passPhrase = m.group(4)
-            result.add(new LineGrouping(passPhrase, character, lowerBorder, upperBorder))
-        }
-    }
-
-    return result
+    return new LineGrouping(passPhrase, character, lowerBorder, upperBorder)
 }
 
 /**
