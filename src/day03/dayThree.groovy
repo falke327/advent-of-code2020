@@ -16,8 +16,7 @@ int treeCounter4 = countTrees(testInput, 0, 7, 1)
 assert 4 == treeCounter4
 int treeCounter5 = countTrees(testInput, 0, 1, 2)
 assert 2 == treeCounter5
-long counterProduct = treeCounter1 * treeCounter2 * treeCounter3 * treeCounter4 * treeCounter5
-assert 336L == counterProduct
+assert 336L == calculateTreeProductOfSlopes([treeCounter1, treeCounter2, treeCounter3, treeCounter4, treeCounter5])
 
 List<String> input = new File("inputThree.txt").readLines()
 int result1 = countTrees(input, 0, 3, 1)
@@ -30,11 +29,8 @@ List<Integer> slopes = [
         countTrees(input, 0, 7, 1),
         countTrees(input, 0, 1, 2)
 ]
-long product = 1L
-slopes.each { trees ->
-    product *= trees
-}
-println("Product of trees on each slope is $product")
+long result2 = calculateTreeProductOfSlopes(slopes)
+println("Product of trees on each slope is $result2")
 
 /**
  * <p>Consumes an input List and iterates from top to bottom in a slope with
@@ -47,7 +43,7 @@ println("Product of trees on each slope is $product")
 static int countTrees(List<String> input, int startPosition, int right, int down) {
     int counter = 0
     int positionX = startPosition
-    int lineLength = input.get(0).length()
+    final int lineLength = input.get(0).length()
 
     for (int positionY = 0; positionY < input.size(); positionY += down) {
         if (input.get(positionY)[positionX] == TREE) {
@@ -57,4 +53,17 @@ static int countTrees(List<String> input, int startPosition, int right, int down
     }
 
     return counter
+}
+
+/**
+ * Calculates the overall Product from a List of tree counts.
+ */
+static long calculateTreeProductOfSlopes(List<Integer> slopes) {
+    long treeProduct = 1L
+
+    slopes.each { trees ->
+        treeProduct *= trees
+    }
+
+    return treeProduct
 }
