@@ -1,7 +1,16 @@
 package day07
 
+import groovy.transform.Field
+
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+
+@Field static final Pattern COUNTED_COLOR_BAG = ~"(\\d+) (.+?) bag"
+@Field static final String OUTER_INNER_SPLITTER = " bags contain"
+@Field static final int OUTER_COLOR = 0
+@Field static final int INNER_COLORS_AND_COUNTS = 1
+@Field static final int BAG_COLOR = 2
+@Field static final int BAG_COUNT = 1
 
 List<String> testInput = new File("testSeven.txt").readLines()
 assert 4 == countBagsForColor(testInput, "shiny gold")
@@ -29,14 +38,16 @@ static int countBagsForColor(List<String> input, String expectedColor) {
 
 /**
  * <p>Recursively checks if the current node or one of its children contains the expected color</p>
+ * <p>Optionally uses a recursion buffer to reduce the performance leakage.</p>
  */
 static boolean containsColor(String currentNode, Map<String, Map> graph, String expectedColor, Map<String, Boolean> recursionBuffer) {
-    if (recursionBuffer.containsKey(currentNode)) {
+    if (recursionBuffer?.containsKey(currentNode)) {
         return recursionBuffer.get(currentNode)
     }
 
     boolean result
     Set<String> children = graph.get(currentNode).keySet()
+
     if (children.isEmpty()) {
         result = false
     } else if (children.contains(expectedColor)) {
@@ -47,7 +58,7 @@ static boolean containsColor(String currentNode, Map<String, Map> graph, String 
         }.any()
     }
 
-    recursionBuffer.put(currentNode, result)
+    recursionBuffer?.put(currentNode, result)
     return result
 }
 
@@ -57,6 +68,7 @@ static boolean containsColor(String currentNode, Map<String, Map> graph, String 
 static int countInnerBags(List<String> input, String outerBagColor) {
     Map<String, Map> graph = transformToGraph(input)
 
+    // return the overall count excluding the most outer bag itself
     return countInnerBagsForGraph(graph, outerBagColor) - 1
 }
 
@@ -83,16 +95,20 @@ static int countInnerBagsForGraph(Map<String, Map> graph, String outerBagColor) 
  * <p>On leaf nodes this inner Map will be empty</p>
  */
 static Map<String, Map> transformToGraph(List<String> input) {
-    Pattern pattern = ~"(\\d+) (.+?) bag"
-    Map<String, Map> container = input.collectEntries { line ->
-        List<String> content = line.split(" bags contain")
-        Matcher m = pattern.matcher(content[1])
-        Map<String, Integer> innerBags = [:]
-        innerBags.putAll(m.findAll().collectEntries { groups ->
-            [groups[2], groups[1]]
-        })
+    return input.collectEntries { line ->
+        List<String> content = line.split(OUTER_INNER_SPLITTER)
 
-        return [content[0], innerBags]
+        return [content[OUTER_COLOR], collectInnerBagEntries(content[INNER_COLORS_AND_COUNTS])]
     }
-    return container
+}
+
+/**
+ * Transforms a String of Bag counts and colors into a Map with color keys and count values
+ */
+static Map<String, Integer> collectInnerBagEntries(String innerContent) {
+    Matcher innerBagMatcher = COUNTED_COLOR_BAG.matcher(innerContent)
+
+    return innerBagMatcher.findAll().collectEntries { groups ->
+        [groups[BAG_COLOR], groups[BAG_COUNT]]
+    }
 }
