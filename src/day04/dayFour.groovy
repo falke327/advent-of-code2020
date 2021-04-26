@@ -2,14 +2,16 @@ package day04
 
 List<String> testInput = new File("testFour.txt").text.split(/\r\n\r\n/)
 int counter1 = countCompleteEntries(testInput)
-assert counter1 == 2
+assert 2 == counter1
+
 List<String> testInput2 = new File("testFour2.txt").text.split(/\r\n\r\n/)
 int counter2 = countValidEntries(testInput2)
-assert counter2 == 4
+assert 4 == counter2
 
 List<String> input = new File("inputFour.txt").text.split(/\r\n\r\n/)
 int result1 = countCompleteEntries(input)
 println("The passport List contains $result1 complete passports")
+
 int result2 = countValidEntries(input)
 println("The passport List contains $result2 valid passports")
 

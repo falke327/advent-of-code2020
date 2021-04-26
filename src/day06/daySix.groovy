@@ -1,12 +1,14 @@
 package day06
 
 List<String> testInput = new File("testSix.txt").text.split(/\r\n\r\n/)
-assert countLettersForGroups(testInput).sum() == 11
-assert countIntersectsForGroups(testInput).sum() == 6
+assert 11 == countLettersForGroups(testInput).sum()
+
+assert 6 == countIntersectsForGroups(testInput).sum()
 
 List<String> input = new File("inputSix.txt").text.split(/\r\n\r\n/)
 int result1 = countLettersForGroups(input).sum() as int
 println("The overall customs sum is $result1")
+
 int result2 = countIntersectsForGroups(input).sum() as int
 println("The overall count of intersections is $result2")
 

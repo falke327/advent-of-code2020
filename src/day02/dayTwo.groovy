@@ -13,13 +13,15 @@ import java.util.regex.Pattern
 
 List<String> testInput = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]
 int validTest1 = validPasswordsByCount(testInput)
-assert validTest1 == 2
+assert 2 == validTest1
+
 int validTest2 = validPasswordsByPosition(testInput)
-assert validTest2 == 1
+assert 1 == validTest2
 
 List<String> input = new File("inputTwo.txt").readLines()
 int result1 = validPasswordsByCount(input)
 println("In the inputfile there are $result1 valid passwords for count criteria.")
+
 int result2 = validPasswordsByPosition(input)
 println("In the inputfile there are $result2 valid passwords for position criteria.")
 

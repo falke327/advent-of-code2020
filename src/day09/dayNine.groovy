@@ -1,14 +1,16 @@
 package day09
 
 List<String> testInput = new File("testNine.txt").readLines()
-assert findFailingXmasCode(testInput, 5) == 127
+assert 127 == findFailingXmasCode(testInput, 5)
+
 List<String> reducedTest = testInput.subList(0, testInput.indexOf(127 as String))
 List partialTest2 = findSumList(reducedTest, 127)
-assert getEncryptionWeakness(partialTest2) == 62
+assert 62 == getEncryptionWeakness(partialTest2)
 
 List<String> input = new File("inputNine.txt").readLines()
 int result1 = findFailingXmasCode(input, 25)
 println("Failing Xmas code found. Value is $result1")
+
 List<String> reducedInput = input.subList(0, input.indexOf(result1 as String))
 List partialResult2 = findSumList(reducedInput, result1)
 println(partialResult2)

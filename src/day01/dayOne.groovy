@@ -6,13 +6,15 @@ import groovy.transform.Field
 
 List<Integer> testInput = [1721, 979, 366, 299, 675, 1456]
 int testResult1 = getYearProductOfTwo(testInput)
-assert testResult1 == 514579
+assert 514579 == testResult1
+
 int testResult2 = getYearProductOfThree(testInput)
-assert testResult2 == 241861950
+assert 241861950 == testResult2
 
 List<Integer> input = new File("inputOne.txt").readLines().collect { line -> line.toInteger() }
 int result1 = getYearProductOfTwo(input)
 println("Solution for first Puzzle is $result1")
+
 int result2 = getYearProductOfThree(input)
 println("Solution for first Puzzle is $result2")
 

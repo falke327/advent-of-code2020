@@ -4,12 +4,14 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 List<String> testInput = new File("testSeven.txt").readLines()
-assert countBagsForColor(testInput, "shiny gold") == 4
-assert countInnerBags(testInput, "shiny gold") == 32
+assert 4 == countBagsForColor(testInput, "shiny gold")
+
+assert 32 == countInnerBags(testInput, "shiny gold")
 
 List<String> input = new File("inputSeven.txt").readLines()
 int result1 = countBagsForColor(input, "shiny gold")
 println("In the input file there are $result1 possible containers for shiny golden bags")
+
 int result2 = countInnerBags(input, "shiny gold")
 println("One bag in shiny gold has to contain $result2 inner bags")
 

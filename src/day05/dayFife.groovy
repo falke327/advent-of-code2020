@@ -1,8 +1,8 @@
 package day05
 
 String testInput = "FBFBBFFRLR"
-assert getRow(testInput) == 44
-assert getCol(testInput) == 5
+assert 44 == getRow(testInput)
+assert 5 == getCol(testInput)
 List<String> testList = ["BFFFBBFRRR", "FFFBBBFRRR", "BBFFBBFRLL"]
 List<Integer> testSeats = testList.collect { line ->
     calculateSeatNumber(line)

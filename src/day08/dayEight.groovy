@@ -1,12 +1,14 @@
 package day08
 
 List<String> testInput = new File("testEight.txt").readLines()
-assert getLastAccBeforeLoop(testInput) == 5
-assert lastAccWithFixOnTheFly(testInput) == 8
+assert 5 == getLastAccBeforeLoop(testInput)
+
+assert 8 == lastAccWithFixOnTheFly(testInput)
 
 List<String> input = new File("inputEight.txt").readLines()
 int result1 = getLastAccBeforeLoop(input)
 println("Last Value before loop was $result1")
+
 int result2 = lastAccWithFixOnTheFly(input)
 println("Last Value in the fixed run was $result2")
 
