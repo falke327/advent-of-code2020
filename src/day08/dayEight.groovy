@@ -1,12 +1,19 @@
 package day08
 
+import groovy.transform.Field
+
+@Field static final String JUMP_OPERATION = "jmp"
+@Field static final String NO_OPERATION = "nop"
+
 List<String> testInput = new File("testEight.txt").readLines()
-assert getLastAccBeforeLoop(testInput) == 5
-assert lastAccWithFixOnTheFly(testInput) == 8
+assert 5 == getLastAccBeforeLoop(testInput)
+
+assert 8 == lastAccWithFixOnTheFly(testInput)
 
 List<String> input = new File("inputEight.txt").readLines()
 int result1 = getLastAccBeforeLoop(input)
 println("Last Value before loop was $result1")
+
 int result2 = lastAccWithFixOnTheFly(input)
 println("Last Value in the fixed run was $result2")
 
@@ -14,31 +21,10 @@ println("Last Value in the fixed run was $result2")
  * <p>Performs the given Instructions until the first loop and returns the acc value.</p>
  */
 static int getLastAccBeforeLoop(List<String> input) {
-    int acc = 0
-    int pointer = 0
-    List<Integer> usedInstructions = []
+    BootRunner bootRunner = new BootRunner()
 
-    while (!usedInstructions.contains(pointer)) {
-        usedInstructions.add(pointer)
-        List<String> currentInstruction = input.get(pointer).split(" ")
-
-        switch (currentInstruction.get(0)) {
-            case 'nop':
-                pointer++
-                break
-            case 'acc':
-                int valueModifier = currentInstruction.get(1) as int
-                acc += valueModifier
-                pointer++
-                break
-            case 'jmp':
-                int jumpStep = currentInstruction.get(1) as int
-                pointer += jumpStep
-                break
-        }
-    }
-
-    return acc
+    bootRunner.run(input)
+    return bootRunner.getAcc()
 }
 
 /**
@@ -47,42 +33,29 @@ static int getLastAccBeforeLoop(List<String> input) {
  */
 static int lastAccWithFixOnTheFly(List<String> input) {
     for (int i = 0; i < input.size(); i++) {
-        List<String> modifiedInput = new ArrayList<>(input)
-        if (modifiedInput[i].startsWith("jmp")) {
-            modifiedInput[i] = modifiedInput[i].replace("jmp", "nop")
-        } else if (modifiedInput[i].startsWith("nop")) {
-            modifiedInput[i] = modifiedInput[i].replace("nop", "jmp")
-        } else {
+        if (!(input[i].startsWith(JUMP_OPERATION) || input[i].startsWith(NO_OPERATION))) {
             continue
         }
+        List<String> modifiedInput = new ArrayList<>(input)
+        modifiedInput[i] = switchLineOperation(modifiedInput[i])
 
-        int acc = 0
-        int pointer = 0
-        List<Integer> usedInstructions = []
+        BootRunner bootRunner = new BootRunner()
+        bootRunner.run(modifiedInput)
 
-        while (!usedInstructions.contains(pointer) && pointer < input.size()) {
-            usedInstructions.add(pointer)
-            List<String> currentInstruction = modifiedInput.get(pointer).split(" ")
-
-            switch (currentInstruction.get(0)) {
-                case 'nop':
-                    pointer++
-                    break
-                case 'acc':
-                    int valueModifier = currentInstruction.get(1) as int
-                    acc += valueModifier
-                    pointer++
-                    break
-                case 'jmp':
-                    int jumpStep = currentInstruction.get(1) as int
-                    pointer += jumpStep
-                    break
-            }
-        }
-
-        if (pointer == input.size()) {
-            return acc
+        if (bootRunner.getPointer() == input.size()) {
+            return bootRunner.getAcc()
         }
     }
     return -1
+}
+
+/**
+ * Switches the Operation in given line from jump to no op or from no op to jump
+ */
+static String switchLineOperation(String line) {
+    if (line.startsWith(JUMP_OPERATION)) {
+        return line.replace(JUMP_OPERATION, NO_OPERATION)
+    } else {
+        return line.replace(NO_OPERATION, JUMP_OPERATION)
+    }
 }
