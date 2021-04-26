@@ -1,14 +1,19 @@
 package day04
 
-List<String> testInput = new File("testFour.txt").text.split(/\r\n\r\n/)
+import groovy.transform.Field
+
+@Field static final String SINGLE_NEWLINE = "\r\n"
+@Field static final String ENTRY_SEPARATOR = /\r\n\r\n/
+
+List<String> testInput = new File("testFour.txt").text.split(ENTRY_SEPARATOR)
 int counter1 = countCompleteEntries(testInput)
 assert 2 == counter1
 
-List<String> testInput2 = new File("testFour2.txt").text.split(/\r\n\r\n/)
+List<String> testInput2 = new File("testFour2.txt").text.split(ENTRY_SEPARATOR)
 int counter2 = countValidEntries(testInput2)
 assert 4 == counter2
 
-List<String> input = new File("inputFour.txt").text.split(/\r\n\r\n/)
+List<String> input = new File("inputFour.txt").text.split(ENTRY_SEPARATOR)
 int result1 = countCompleteEntries(input)
 println("The passport List contains $result1 complete passports")
 
@@ -52,7 +57,7 @@ static List<Passport> parsePassports(List<String> lines) {
     List<Passport> passports = []
     lines.each {line ->
         passports.add(
-                new Passport(line.replace("\r\n"," "))
+                new Passport(line.replace(SINGLE_NEWLINE," "))
         )
     }
     return passports
