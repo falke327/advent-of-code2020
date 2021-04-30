@@ -17,41 +17,36 @@ println("Last Value before loop was $result1")
 int result2 = lastAccWithFixOnTheFly(input)
 println("Last Value in the fixed run was $result2")
 
-/**
- * <p>Performs the given Instructions until the first loop and returns the acc value.</p>
- */
-static int getLastAccBeforeLoop(List<String> input) {
+static int getLastAccBeforeLoop(List<String> instructions) {
     BootRunner bootRunner = new BootRunner()
 
-    bootRunner.run(input)
+    bootRunner.run(instructions)
     return bootRunner.getAcc()
 }
 
 /**
- * <p>Bruteforces the given instructions with fixing one jmp or nop in each run.
- * Returns the acc value for the valid run.</p>
+ * Bruteforces the given instructions with fixing one jmp or nop in each run.
+ *
+ * @return the acc value for the valid run.<br/>-1 if no valid run has been found
  */
-static int lastAccWithFixOnTheFly(List<String> input) {
-    for (int i = 0; i < input.size(); i++) {
-        if (!(input[i].startsWith(JUMP_OPERATION) || input[i].startsWith(NO_OPERATION))) {
+static int lastAccWithFixOnTheFly(List<String> instructions) {
+    for (int i = 0; i < instructions.size(); i++) {
+        if (!(instructions[i].startsWith(JUMP_OPERATION) || instructions[i].startsWith(NO_OPERATION))) {
             continue
         }
-        List<String> modifiedInput = new ArrayList<>(input)
-        modifiedInput[i] = switchLineOperation(modifiedInput[i])
+        List<String> modifiedInstructions = new ArrayList<>(instructions)
+        modifiedInstructions[i] = switchLineOperation(modifiedInstructions[i])
 
         BootRunner bootRunner = new BootRunner()
-        bootRunner.run(modifiedInput)
+        bootRunner.run(modifiedInstructions)
 
-        if (bootRunner.getPointer() == input.size()) {
+        if (bootRunner.getPointer() == instructions.size()) {
             return bootRunner.getAcc()
         }
     }
     return -1
 }
 
-/**
- * Switches the Operation in given line from jump to no op or from no op to jump
- */
 static String switchLineOperation(String line) {
     if (line.startsWith(JUMP_OPERATION)) {
         return line.replace(JUMP_OPERATION, NO_OPERATION)

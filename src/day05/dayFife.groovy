@@ -11,8 +11,8 @@ import java.util.regex.Pattern
 @Field static final int SEATS_PER_ROW = 8
 
 String testInput = "FBFBBFFRLR"
-assert 44 == getRow(testInput)
-assert 5 == getCol(testInput)
+assert 44 == calculateRow(testInput)
+assert 5 == calculateColumn(testInput)
 List<String> testList = ["BFFFBBFRRR", "FFFBBBFRRR", "BBFFBBFRLL"]
 List<Integer> testSeats = testList.collect { line ->
     calculateSeatNumber(line)
@@ -29,16 +29,10 @@ println("Highest available seat is $result1")
 int result2 = findTheOnlyFreeSeat(input)
 println("My seat is $result2")
 
-/**
- * Returns the highest value in a List of seat codings.
- */
 static int findHighestSeatNumber(List<String> input) {
     return collectSeatNumbers(input).max()
 }
 
-/**
- * Subtract used seats from all available seats
- */
 static int findTheOnlyFreeSeat(List<String> input) {
     List<Integer> usedSeats = collectSeatNumbers(input)
     int first = usedSeats.max()
@@ -67,41 +61,30 @@ static List<Integer> collectSeatNumbers(List<String> input) {
  * @return decoded row * SEATS_PER_ROW + decoded column
  */
 static int calculateSeatNumber(String input) {
-    int row = getRow(input)
-    int col = getCol(input)
+    int row = calculateRow(input)
+    int col = calculateColumn(input)
     return row * SEATS_PER_ROW + col
 }
 
-/**
- * Calculates the row number from given input.
- */
-static int getRow(String input) {
+static int calculateRow(String input) {
     String rowDefinition = extractMatch(input, ROW_PATTERN)
     int initialStepSize = calculateInitialStepsize(rowDefinition)
 
     return findPosition(initialStepSize, rowDefinition, ROW_UPPER_CHARACTER)
 }
 
-/**
- * Calculates the column number from given input.
- */
-static int getCol(String input) {
+static int calculateColumn(String input) {
     String colDefinition = extractMatch(input, COL_PATTERN)
     int initialStepSize = calculateInitialStepsize(colDefinition)
 
     return findPosition(initialStepSize, colDefinition, COL_UPPER_CHARACTER)
 }
 
-/**
- * Calculates the needed initial stepsize from the length of the definition String
- */
 static int calculateInitialStepsize(String definitionString) {
     return ((2**(definitionString.length())) / 2) as int
 }
 
 /**
- * Extracts a substring from given input with regex pattern
- *
  * @return the substring or empty() if there has been no match
  */
 static String extractMatch(String input, pattern) {

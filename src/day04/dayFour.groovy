@@ -48,11 +48,6 @@ static int countValidEntries(List<String> lines) {
     }
 }
 
-/**
- * <p>Parses a passport String into a {@link day04.Passport} Object</p>
- *
- * @return a List of Passports
- */
 static List<Passport> parsePassports(List<String> lines) {
     List<Passport> passports = []
     lines.each {line ->

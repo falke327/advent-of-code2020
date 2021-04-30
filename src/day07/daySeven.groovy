@@ -25,7 +25,7 @@ int result2 = countInnerBags(input, "shiny gold")
 println("One bag in shiny gold has to contain $result2 inner bags")
 
 /**
- * <p>Counts all the color-codes in the input List when they or their children contain the expected color</p>
+ * Counts all the color-codes in the input List when they or their children contain the expected color
  */
 static int countBagsForColor(List<String> input, String expectedColor) {
     Map<String, Map> graph = transformToGraph(input)
@@ -62,9 +62,6 @@ static boolean containsColor(String currentNode, Map<String, Map> graph, String 
     return result
 }
 
-/**
- * <p>Uses the recursive count on graph to get all inner bags and subtracts the most outer bag.</p>
- */
 static int countInnerBags(List<String> input, String outerBagColor) {
     Map<String, Map> graph = transformToGraph(input)
 
@@ -72,9 +69,6 @@ static int countInnerBags(List<String> input, String outerBagColor) {
     return countInnerBagsForGraph(graph, outerBagColor) - 1
 }
 
-/**
- * <p>Recursively counts the number of inner bags in the graph of bags for given outer Bag</p>
- */
 static int countInnerBagsForGraph(Map<String, Map> graph, String outerBagColor) {
     Map<String, Integer> children = graph.get(outerBagColor)
 

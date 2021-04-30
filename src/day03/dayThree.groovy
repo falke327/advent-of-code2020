@@ -55,9 +55,6 @@ static int countTrees(List<String> input, int startPosition, int right, int down
     return counter
 }
 
-/**
- * Calculates the overall Product from a List of tree counts.
- */
 static long calculateTreeProductOfSlopes(List<Integer> slopes) {
     long treeProduct = 1L
 

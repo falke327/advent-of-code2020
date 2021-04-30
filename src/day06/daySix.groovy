@@ -16,9 +16,6 @@ println("The overall customs sum is $result1")
 int result2 = sumUp(collectIntersectionCountForAnswerGroups(input))
 println("The overall count of intersections is $result2")
 
-/**
- * Sums up the values of an Integer List
- */
 static int sumUp(List<Integer> input) {
     return input.sum() as int
 }
