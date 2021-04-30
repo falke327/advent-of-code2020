@@ -30,7 +30,7 @@ static int sumUp(List<Integer> input) {
 static List<Integer> collectDistinctLettersCountForAnswerGroups(List<String> lines) {
     List<Integer> groups = []
 
-    lines.each {groupString ->
+    lines.each { groupString ->
         Set<String> distinctAnswers = collectDistinctAnswers(groupString)
         groups.add(distinctAnswers.size())
     }
@@ -45,7 +45,7 @@ static Set<String> collectDistinctAnswers(String groupString) {
     List<String> personAnswers = groupString.split()
     Set<String> distinctAnswers = []
 
-    personAnswers.each {answer ->
+    personAnswers.each { answer ->
         distinctAnswers.addAll(answer.toSet())
     }
 
@@ -77,7 +77,7 @@ static List<Set> collectIndividualAnswerGroups(String groupString) {
     List<String> personAnswers = groupString.split()
     List<Set> individualAnswers = []
 
-    personAnswers.each {answer ->
+    personAnswers.each { answer ->
         individualAnswers.add(answer.toSet())
     }
 
@@ -93,7 +93,7 @@ static List<Set> collectIndividualAnswerGroups(String groupString) {
 static Set<String> collectOverallIntersection(List<Set> individualAnswers) {
     Set<String> result = ('a'..'z').toList()
 
-    individualAnswers.each {answer->
+    individualAnswers.each { answer ->
         result = result.intersect(answer)
     }
 

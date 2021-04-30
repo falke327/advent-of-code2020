@@ -43,7 +43,7 @@ static int findFailingXmasCode(List input, int offset) {
  */
 static boolean isXmasCode(List subList, int checkValue) {
     for (int a = 0; a < subList.size() - 1; a++) {
-        for (int b = a + 1; b < subList.size(); b ++) {
+        for (int b = a + 1; b < subList.size(); b++) {
             int firstSummand = subList[a] as int
             int secondSummand = subList[b] as int
             if (firstSummand + secondSummand == checkValue) {
@@ -62,7 +62,7 @@ static boolean isXmasCode(List subList, int checkValue) {
  */
 static List findSumList(List input, int checkValue) {
     int windowSize = 3
-    while(windowSize < input.size()) {
+    while (windowSize < input.size()) {
         for (int i = 0; i + windowSize < input.size(); i++) {
             List currentSublist = input.subList(i, i + windowSize)
             if (currentSublist.sum { it as int } == checkValue) {

@@ -63,7 +63,7 @@ static BigDecimal countAllSortedChains(List<Integer> unsortedAdapters) {
     // start from second entry to skip leading 0 in List
     sortedAdapters.remove(0)
     for (Integer i : sortedAdapters) {
-        possibilities[i] = (possibilities[i-1] as BigDecimal + possibilities[i-2] as BigDecimal + possibilities[i-3] as BigDecimal)
+        possibilities[i] = (possibilities[i - 1] as BigDecimal + possibilities[i - 2] as BigDecimal + possibilities[i - 3] as BigDecimal)
     }
 
     return possibilities.last()

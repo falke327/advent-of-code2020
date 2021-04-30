@@ -50,9 +50,9 @@ static int countValidEntries(List<String> lines) {
 
 static List<Passport> parsePassports(List<String> lines) {
     List<Passport> passports = []
-    lines.each {line ->
+    lines.each { line ->
         passports.add(
-                new Passport(line.replace(SINGLE_NEWLINE," "))
+                new Passport(line.replace(SINGLE_NEWLINE, " "))
         )
     }
     return passports

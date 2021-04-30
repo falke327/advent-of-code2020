@@ -75,7 +75,7 @@ static int countInnerBagsForGraph(Map<String, Map> graph, String outerBagColor) 
     if (children.isEmpty()) {
         return 1
     } else {
-        return 1 + (children.keySet().sum{ key ->
+        return 1 + (children.keySet().sum { key ->
             int count = children.get(key) as int
             return count * countInnerBagsForGraph(graph, key as String)
         } as int)
