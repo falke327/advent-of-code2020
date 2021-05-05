@@ -29,6 +29,23 @@ static int calculateAdapterProduct(List<Integer> adapters) {
     return oneStepAdapters * threeStepAdapters
 }
 
+/**
+ * Unfortunately I didn't get how this algorithm works. Adapted dynamic programming solution from TheMorpheusTutorials
+ */
+static BigDecimal countAllSortedChains(List<Integer> unsortedAdapters) {
+    List<Integer> sortedAdapters = collectSortedAdaptersWithSourceAndSink(unsortedAdapters)
+
+    List<BigDecimal> possibilities = [0] * sortedAdapters.max()
+    possibilities[0] = 1
+    // start from second entry to skip leading 0 in List
+    sortedAdapters.remove(0)
+    for (Integer i : sortedAdapters) {
+        possibilities[i] = (possibilities[i - 1] as BigDecimal + possibilities[i - 2] as BigDecimal + possibilities[i - 3] as BigDecimal)
+    }
+
+    return possibilities.last()
+}
+
 static int countByStepSize(List<Integer> adapters, int stepSize) {
     int counter = 0
 
@@ -50,21 +67,4 @@ static List<Integer> collectSortedAdaptersWithSourceAndSink(List<Integer> unsort
     result.add(SINK)
 
     return result.sort()
-}
-
-/**
- * Unfortunately I didn't get how this algorithm works. Adapted dynamic programming solution from TheMorpheusTutorials
- */
-static BigDecimal countAllSortedChains(List<Integer> unsortedAdapters) {
-    List<Integer> sortedAdapters = collectSortedAdaptersWithSourceAndSink(unsortedAdapters)
-
-    List<BigDecimal> possibilities = [0] * sortedAdapters.max()
-    possibilities[0] = 1
-    // start from second entry to skip leading 0 in List
-    sortedAdapters.remove(0)
-    for (Integer i : sortedAdapters) {
-        possibilities[i] = (possibilities[i - 1] as BigDecimal + possibilities[i - 2] as BigDecimal + possibilities[i - 3] as BigDecimal)
-    }
-
-    return possibilities.last()
 }

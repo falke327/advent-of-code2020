@@ -36,6 +36,13 @@ static int countBagsForColor(List<String> input, String expectedColor) {
     }
 }
 
+static int countInnerBags(List<String> input, String outerBagColor) {
+    Map<String, Map> graph = transformToGraph(input)
+
+    // return the overall count excluding the most outer bag itself
+    return countInnerBagsForGraph(graph, outerBagColor) - 1
+}
+
 /**
  * <p>Recursively checks if the current node or one of its children contains the expected color</p>
  * <p>Optionally uses a recursion buffer to reduce the performance leakage.</p>
@@ -60,13 +67,6 @@ static boolean containsColor(String currentNode, Map<String, Map> graph, String 
 
     recursionBuffer?.put(currentNode, result)
     return result
-}
-
-static int countInnerBags(List<String> input, String outerBagColor) {
-    Map<String, Map> graph = transformToGraph(input)
-
-    // return the overall count excluding the most outer bag itself
-    return countInnerBagsForGraph(graph, outerBagColor) - 1
 }
 
 static int countInnerBagsForGraph(Map<String, Map> graph, String outerBagColor) {

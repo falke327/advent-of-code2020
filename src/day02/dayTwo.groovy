@@ -26,6 +26,46 @@ int result2 = validPasswordsByPosition(input)
 println("In the inputfile there are $result2 valid passwords for position criteria.")
 
 /**
+ * <p>Consumes a List of Strings and calls collectMatchingGroups() to get valid
+ * groupings</p>
+ * <p>Checks if the pass phrase of each line contains the exact amount of relevant
+ * characters that is defined by the lower and upper border</p>
+ * <p>"1-3 a: abcde" contains one a, what is between 1 and 3. This will result in true.</p>
+ * <p>"1-3 a: aaaaa" contains fife a, what is over the upper border of 3. This will result in false.</p>
+ *
+ * @return the count of valid lines in the input List
+ */
+static int validPasswordsByCount(List<String> input) {
+    List<LineGrouping> matcherGroups = collectMatchingGroups(input)
+
+    return matcherGroups.count { lineGrouping ->
+        lineGrouping.getLowerBorder() <= lineGrouping.countCharsInPassphrase() &&
+                lineGrouping.countCharsInPassphrase() <= lineGrouping.getUpperBorder()
+    }
+}
+
+/**
+ * <p>Consumes a List of Strings and calls collectMatchingGroups() to get valid
+ * groupings</p>
+ * <p>Checks if the pass phrase contains the relevant character on either the
+ * lower or upper position, but never both at the same time.</p>
+ * <p>"1-3 a: abcde" contains an a at position 1 and no a at position 3. This will result in true.</p>
+ * <p>"1-3 a: aaaaa" contains an a at position 1 and also on position 3. This will result in false.</p>
+ *
+ * @return the count of valid lines in the input List
+ */
+static int validPasswordsByPosition(List<String> input) {
+    List<LineGrouping> matcherGroups = collectMatchingGroups(input)
+
+    return matcherGroups.count { lineGrouping ->
+        lineGrouping.getPassPhrase().charAt(lineGrouping.getLowerBorder() - 1) == lineGrouping.getCharacter() &&
+                lineGrouping.getPassPhrase().charAt(lineGrouping.getUpperBorder() - 1) != lineGrouping.getCharacter() ||
+                lineGrouping.getPassPhrase().charAt(lineGrouping.getLowerBorder() - 1) != lineGrouping.getCharacter() &&
+                lineGrouping.getPassPhrase().charAt(lineGrouping.getUpperBorder() - 1) == lineGrouping.getCharacter()
+    }
+}
+
+/**
  * <p>Collects {@link day02.LineGrouping} from a List of Strings.</p>
  * <p>Input entries should be formatted like "1-3 a: abcde"</p>
  *
@@ -61,43 +101,4 @@ static LineGrouping packLineGrouping(Matcher lineMatcher) {
     String passPhrase = lineMatcher.group(PASSPHRASE)
 
     return new LineGrouping(passPhrase, character, lowerBorder, upperBorder)
-}
-
-/**
- * <p>Consumes a List of Strings and calls collectMatchingGroups() to get valid
- * groupings</p>
- * <p>Checks if the pass phrase of each line contains the exact amount of relevant
- * characters that is defined by the lower and upper border</p>
- * <p>"1-3 a: abcde" contains one a, what is between 1 and 3. This will result in true.</p>
- * <p>"1-3 a: aaaaa" contains fife a, what is over the upper border of 3. This will result in false.</p>
- *
- * @return the count of valid lines in the input List
- */
-static int validPasswordsByCount(List<String> input) {
-    List<LineGrouping> matcherGroups = collectMatchingGroups(input)
-
-    return matcherGroups.count { lineGrouping ->
-        lineGrouping.getLowerBorder() <= lineGrouping.getCharCount() && lineGrouping.getCharCount() <= lineGrouping.getUpperBorder()
-    }
-}
-
-/**
- * <p>Consumes a List of Strings and calls collectMatchingGroups() to get valid
- * groupings</p>
- * <p>Checks if the pass phrase contains the relevant character on either the
- * lower or upper position, but never both at the same time.</p>
- * <p>"1-3 a: abcde" contains an a at position 1 and no a at position 3. This will result in true.</p>
- * <p>"1-3 a: aaaaa" contains an a at position 1 and also on position 3. This will result in false.</p>
- *
- * @return the count of valid lines in the input List
- */
-static int validPasswordsByPosition(List<String> input) {
-    List<LineGrouping> matcherGroups = collectMatchingGroups(input)
-
-    return matcherGroups.count { lineGrouping ->
-        lineGrouping.getPassPhrase().charAt(lineGrouping.getLowerBorder() - 1) == lineGrouping.getCharacter() &&
-                lineGrouping.getPassPhrase().charAt(lineGrouping.getUpperBorder() - 1) != lineGrouping.getCharacter() ||
-                lineGrouping.getPassPhrase().charAt(lineGrouping.getLowerBorder() - 1) != lineGrouping.getCharacter() &&
-                lineGrouping.getPassPhrase().charAt(lineGrouping.getUpperBorder() - 1) == lineGrouping.getCharacter()
-    }
 }

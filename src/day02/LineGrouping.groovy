@@ -18,7 +18,7 @@ class LineGrouping {
         this.upperBorder = upperBorder
     }
 
-    int getCharCount() {
+    int countCharsInPassphrase() {
         return passPhrase.count(character as String)
     }
 }

@@ -39,20 +39,6 @@ static List<Integer> collectDistinctLettersCountForAnswerGroups(List<String> lin
 }
 
 /**
- * Transforms a String representation of an answer group into a Set of distinct answers.
- */
-static Set<String> collectDistinctAnswers(String groupString) {
-    List<String> personAnswers = groupString.split()
-    Set<String> distinctAnswers = []
-
-    personAnswers.each { answer ->
-        distinctAnswers.addAll(answer.toSet())
-    }
-
-    return distinctAnswers
-}
-
-/**
  * <p>Consumes a List of answers in groups split by empty lines
  * and counts the intersect digits for each group</p>
  * <p>[ab, acd] -> ab + acd -> a -> 1</p>
@@ -68,6 +54,20 @@ static List<Integer> collectIntersectionCountForAnswerGroups(List<String> lines)
     }
 
     return groups
+}
+
+/**
+ * Transforms a String representation of an answer group into a Set of distinct answers.
+ */
+static Set<String> collectDistinctAnswers(String groupString) {
+    List<String> personAnswers = groupString.split()
+    Set<String> distinctAnswers = []
+
+    personAnswers.each { answer ->
+        distinctAnswers.addAll(answer.toSet())
+    }
+
+    return distinctAnswers
 }
 
 /**

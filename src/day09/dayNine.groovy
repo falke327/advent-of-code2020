@@ -28,30 +28,17 @@ static int findFailingXmasCode(List input, int offset) {
     int endIndex = offset
     for (int i = offset; i < input.size(); i++) {
         int checkValue = input[i] as int
-        if (!isXmasCode(input.subList(startIndex, endIndex), checkValue)) {
+        List relevantPositions = input.subList(startIndex, endIndex)
+
+        if (!isXmasCode(relevantPositions, checkValue)) {
             return checkValue
         }
+
         startIndex++
         endIndex++
     }
 
     return -1
-}
-
-/**
- * A Value is in Xmas code if it can be build as a sum of two values from given List
- */
-static boolean isXmasCode(List subList, int checkValue) {
-    for (int a = 0; a < subList.size() - 1; a++) {
-        for (int b = a + 1; b < subList.size(); b++) {
-            int firstSummand = subList[a] as int
-            int secondSummand = subList[b] as int
-            if (firstSummand + secondSummand == checkValue) {
-                return true
-            }
-        }
-    }
-    return false
 }
 
 /**
@@ -81,4 +68,20 @@ static int calculateEncryptionWeakness(List input) {
     int minimum = input.min() as int
     int maximum = input.max() as int
     return minimum + maximum
+}
+
+/**
+ * A Value is in Xmas code if it can be build as a sum of two values from given List
+ */
+static boolean isXmasCode(List subList, int checkValue) {
+    for (int a = 0; a < subList.size() - 1; a++) {
+        for (int b = a + 1; b < subList.size(); b++) {
+            int firstSummand = subList[a] as int
+            int secondSummand = subList[b] as int
+            if (firstSummand + secondSummand == checkValue) {
+                return true
+            }
+        }
+    }
+    return false
 }
