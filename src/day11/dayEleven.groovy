@@ -10,9 +10,11 @@ import groovy.transform.Field
 List<String> testInput = new File("testEleven.txt").readLines()
 assert 37 == countOccupiedSeatsInStableStatus(testInput)
 
-List<String> input = new File("inputEleven.txt").readLines()
-int result1 = countOccupiedSeatsInStableStatus(input)
-println("There are $result1 occupied seats in the stable state")
+//List<String> input = new File("inputEleven.txt").readLines()
+//int result1 = countOccupiedSeatsInStableStatus(input)
+//println("There are $result1 occupied seats in the stable state")
+
+// TODO: extract into Class
 
 static int countOccupiedSeatsInStableStatus(List<String> seatArrangement) {
     List<String> stableStatus = calculateStableStatus(seatArrangement)
