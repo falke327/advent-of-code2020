@@ -12,7 +12,7 @@ class WaitingArea {
 
     WaitingArea(List<String> seatArrangement) {
         this.currentStatus = seatArrangement.collect { line ->
-            return line.toCharArray()
+            line.toCharArray()
         } as char[][]
         this.xSize = this.currentStatus[0].size()
         this.ySize = this.currentStatus.length
@@ -25,7 +25,8 @@ class WaitingArea {
     }
 
     void updateAllSeatsByNeighbor() {
-        char[][] deepCopy = this.currentStatus.collect { it.clone() }
+        char[][] deepCopy = this.currentStatus.collect { it.collect() }
+
         for (int yPosition = 0; yPosition < this.ySize; yPosition++) {
             for (int xPosition = 0; xPosition < this.xSize; xPosition++) {
                 this.currentStatus[yPosition][xPosition] = updateSeatStatus(xPosition, yPosition, deepCopy)
@@ -35,6 +36,7 @@ class WaitingArea {
 
     private char updateSeatStatus(int xPosition, int yPosition, char[][] oldStatus) {
         char currentSeat = oldStatus[yPosition][xPosition]
+
         switch (currentSeat) {
             case EMPTY_SEAT:
                 return (countOccupiedNeighbors(xPosition, yPosition, oldStatus) == 0) ? OCCUPIED_SEAT : EMPTY_SEAT
@@ -48,17 +50,16 @@ class WaitingArea {
     }
 
     private int countOccupiedNeighbors(int xPosition, int yPosition, char[][] oldStatus) {
-        int counter = 0
+        int occupiedSeats = ((yPosition - 1)..(yPosition + 1)).collect { yCoordinate ->
+            (isValidY(yCoordinate)) ? countLineOccurrences(xPosition, oldStatus[yCoordinate]) : 0
+        }.sum() as int
 
-        ((yPosition - 1)..(yPosition + 1)).each { yCoordinate ->
-            counter += (isValidY(yCoordinate)) ? countLineOccurrences(xPosition, oldStatus[yCoordinate]) : 0
-        }
         // don't count Position itself
         if (oldStatus[yPosition][xPosition] == OCCUPIED_SEAT) {
-            counter--
+            occupiedSeats--
         }
 
-        return counter
+        return occupiedSeats
     }
 
     private boolean isValidY(int yPosition) {
