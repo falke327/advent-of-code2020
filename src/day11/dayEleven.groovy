@@ -2,14 +2,16 @@ package day11
 
 List<String> testInput = new File("testEleven.txt").readLines()
 WaitingArea testWaitingArea = new WaitingArea(testInput)
-WaitingArea testWaitingArea2 = new WaitingArea(testInput)
 assert 37 == countOccupiedSeatsInStableStatusByNeighborRule(testWaitingArea)
+
+WaitingArea testWaitingArea2 = new WaitingArea(testInput)
 assert 26 == countOccupiedSeatsInStableStatusByVisibleRule(testWaitingArea2)
 
 List<String> input = new File("inputEleven.txt").readLines()
 WaitingArea waitingArea = new WaitingArea(input)
 int result1 = countOccupiedSeatsInStableStatusByNeighborRule(waitingArea)
 println("There are $result1 occupied seats for neighbor rule")
+
 WaitingArea waitingArea2 = new WaitingArea(input)
 int result2 = countOccupiedSeatsInStableStatusByVisibleRule(waitingArea2)
 println("There are $result2 occupied seats for visible rule")
